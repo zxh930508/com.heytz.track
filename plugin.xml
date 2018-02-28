@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.heytz.track" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>ServiceWrapper</name>
+    <js-module name="trackWrapper" src="www/trackWrapper.js">
+        <clobbers target="cordova.plugins.trackWrapper"/>
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="trackWrapper">
+                <param name="android-package" value="com.heytz.trackWrapper.trackWrapper"/>
+            </feature>
+        </config-file>
+        <config-file parent="/manifest/application" target="AndroidManifest.xml">
+            <service
+                    android:name="com.baidu.trace.LBSTraceService"
+                    android:enabled="true"
+                    android:process=":remote">
+            </service>
+            <meta-data
+                    android:name="com.baidu.lbsapi.API_KEY"
+                    android:value="6BFQfZt3576lmiBwoe7LCiGkoDmpPBWh" />
+        </config-file>
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+
+        <!-- 这个权限用于进行网络定位-->
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+            <!-- 这个权限用于访问GPS定位-->
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+            <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+            <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+            <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+            <!-- 用于读取手机当前的状态-->
+            <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+            <!-- 写入扩展存储，向扩展卡写入数据，用于写入对象存储BOS数据-->
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+            <!-- 访问网络，网络定位需要上网-->
+            <uses-permission android:name="android.permission.INTERNET" />
+            <!-- SD卡读取权限，用于写入对象存储BOS数据-->
+            <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+            <!-- 用于加快GPS首次定位-->
+            <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"></uses-permission>
+            <!-- 用于Android M及以上系统，申请加入忽略电池优化白名单-->
+            <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"></uses-permission>
+        </config-file>
+
+        <source-file src="src/android/trackWrapper.java" target-dir="src/com/heytz/trackWrapper"/>
+        <source-file src="libs/BaiduTraceSDK_v3_0_4.jar" target-dir="libs"/>
+        <source-file src="libs/arm64-v8a/libBaiduTraceSDK_v3_0_4.so" target-dir="libs/arm64-v8a"/>
+        <source-file src="libs/armeabi/libBaiduTraceSDK_v3_0_4.so" target-dir="libs/armeabi"/>
+        <source-file src="libs/armeabi-v7a/libBaiduTraceSDK_v3_0_4.so" target-dir="libs/armeabi-v7a"/>
+        <source-file src="libs/x86/libBaiduTraceSDK_v3_0_4.so" target-dir="libs/x86"/>
+        <source-file src="libs/x86_64/libBaiduTraceSDK_v3_0_4.so" target-dir="libs/x86_64"/>
+
+
+    </platform>
+    <platform name="ios">
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+            <string>需要持续定位</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="UIBackgroundModes">
+            <array>
+                <string>location</string>
+            </array>
+        </config-file>
+        <config-file parent="/*" target="config.xml">
+            <feature name="trackWrapper">
+                <param name="ios-package" value="trackWrapper"/>
+            </feature>
+        </config-file>
+        <source-file src="src/ios/track.m"/>
+        <framework src="src/ios/libs/BaiduTraceSDK.framework" embed="true" custom="true"/>
+    </platform>
+
+</plugin>

@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "name": "com.heytz.track",
+  "cordova_name": "track",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "engines": []
+}
